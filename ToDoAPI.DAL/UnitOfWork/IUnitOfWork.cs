@@ -10,6 +10,7 @@ namespace ToDoAPI.DAL.UnitOfWork
     public interface IUnitOfWork
     {
         IToDoRepository ToDoRepository { get; }
-        void Save();
+        int Save();
+        Task<int> SaveAsync();
     }
 }

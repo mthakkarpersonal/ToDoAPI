@@ -13,9 +13,14 @@ namespace ToDoAPI.DAL.UnitOfWork
         public IToDoRepository ToDoRepository { get; private set; }
 
 
-        public void Save()
+        public int Save()
         {
-            throw new NotImplementedException();
+            return _dbContext.SaveChanges();
+        }
+
+        public async Task<int> SaveAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

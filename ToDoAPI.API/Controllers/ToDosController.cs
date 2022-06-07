@@ -17,34 +17,63 @@ namespace ToDoAPI.API.Controllers
         }
         // GET: api/<ToDosController>
         [HttpGet]
-        public async Task<IEnumerable<ToDo>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _uow.ToDoRepository.GetAllAsync();
+            return Ok(await _uow.ToDoRepository.GetAllAsync());
         }
 
         // GET api/<ToDosController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var todo = await _uow.ToDoRepository.GetAync(id);
+            if (todo == null)
+            {
+                return NotFound();
+            }
+            return Ok(todo);
         }
 
         // POST api/<ToDosController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] ToDo data)
         {
+            await _uow.ToDoRepository.AddAsync(data);
+            await _uow.SaveAsync();
+            return Ok(data);
         }
 
         // PUT api/<ToDosController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] ToDo data)
         {
+            var todo = await _uow.ToDoRepository.GetAync(id);
+            if (todo == null)
+            {
+                return NotFound();
+            }
+            if (todo != null)
+            {
+                todo.Name = data.Name;
+                todo.IsCompleted = data.IsCompleted;
+            }
+            await _uow.ToDoRepository.UpdateAsync(todo);
+            await _uow.SaveAsync();
+            return Ok();
         }
 
         // DELETE api/<ToDosController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var todo = await _uow.ToDoRepository.GetAync(id);
+            if (todo == null)
+            {
+                return NotFound();
+            }
+            await _uow.ToDoRepository.DeleteAsync(todo);
+            await _uow.SaveAsync();
+            return Ok();
         }
     }
 }
