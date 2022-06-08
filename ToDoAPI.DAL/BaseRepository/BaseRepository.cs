@@ -42,11 +42,10 @@ namespace ToDoAPI.DAL.BaseRepository
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<T> AddAsync(T entity)
+        public virtual async Task AddAsync(T entity)
         {
             _logger.LogInformation("AddAsync Method Called");
             await _dbSet.AddAsync(entity);
-            return entity;
         }
 
         //public virtual async Task UpdateAsync(T entity)

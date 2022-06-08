@@ -24,7 +24,7 @@ namespace ToDoAPI.API.Controllers
 
         // GET api/<ToDosController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetToDo(int id)
         {
             var todo = await _uow.ToDoRepository.GetAync(id);
             if (todo == null)
@@ -40,7 +40,7 @@ namespace ToDoAPI.API.Controllers
         {
             await _uow.ToDoRepository.AddAsync(data);
             await _uow.SaveAsync();
-            return Ok(data);
+            return CreatedAtAction(nameof(GetToDo), new { id = data.Id }, data);
         }
 
         // PUT api/<ToDosController>/5
