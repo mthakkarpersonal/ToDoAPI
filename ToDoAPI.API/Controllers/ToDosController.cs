@@ -57,7 +57,7 @@ namespace ToDoAPI.API.Controllers
                 todo.Name = data.Name;
                 todo.IsCompleted = data.IsCompleted;
             }
-            await _uow.ToDoRepository.UpdateAsync(todo);
+            _uow.ToDoRepository.Update(todo);
             await _uow.SaveAsync();
             return Ok();
         }
@@ -71,7 +71,7 @@ namespace ToDoAPI.API.Controllers
             {
                 return NotFound();
             }
-            await _uow.ToDoRepository.DeleteAsync(todo);
+            _uow.ToDoRepository.Delete(todo);
             await _uow.SaveAsync();
             return Ok();
         }
