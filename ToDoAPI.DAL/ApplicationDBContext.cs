@@ -38,5 +38,31 @@ namespace ToDoAPI.DAL
                }
             );
         }
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            OnBeforSaveChanges();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            OnBeforSaveChanges();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+        public void OnBeforSaveChanges()
+        {
+            foreach (var entry in base.ChangeTracker.Entries<BaseEntity>()
+                .Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
+            {
+                var currentDate = DateTime.Now;
+                entry.Entity.ModDt = currentDate;
+                //entry.Entity.ModBy = 1;
+
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.EntDt = currentDate;
+                    //entry.Entity.EntBy = 1;
+                }
+            }
+        }
     }
 }
