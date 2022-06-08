@@ -28,7 +28,7 @@ namespace ToDoAPI.DAL.BaseRepository
         {
             _logger.LogInformation("Delete Method Called");
             _dbSet.Remove(entity);
-        } 
+        }
 
 
         public virtual async Task<T> GetAync(int id)
@@ -46,6 +46,12 @@ namespace ToDoAPI.DAL.BaseRepository
         {
             _logger.LogInformation("AddAsync Method Called");
             await _dbSet.AddAsync(entity);
+        }
+        public virtual async Task DeleteAsync(int id)
+        {
+            _logger.LogInformation("DeleteAsync Method Called");
+            var entity = await _dbSet.FindAsync(id);
+            _dbSet.Remove(entity);
         }
 
         //public virtual async Task UpdateAsync(T entity)

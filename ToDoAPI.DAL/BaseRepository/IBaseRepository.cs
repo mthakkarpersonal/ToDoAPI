@@ -18,8 +18,8 @@ namespace ToDoAPI.DAL.BaseRepository
         Task<T> GetAync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
         Task AddAsync(T entity);
+        Task DeleteAsync(int id);
         //Task<bool> ExistsAsync(int id);
         //Task UpdateAsync(T entity);
-        //Task DeleteAsync(T entity);
     }
 }
