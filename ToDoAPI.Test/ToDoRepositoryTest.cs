@@ -100,7 +100,7 @@ namespace ToDoAPI.Test
             _context.SaveChanges();
 
             // Act
-            _repo.Delete(_todo1);
+            _repo.Delete(_todo1.Id);
             _context.SaveChanges();
 
             // Assert

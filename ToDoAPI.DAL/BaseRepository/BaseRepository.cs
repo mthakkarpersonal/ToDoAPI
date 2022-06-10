@@ -19,19 +19,26 @@ namespace ToDoAPI.DAL.BaseRepository
         public virtual IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) =>
             _dbSet.Where(expression).AsNoTracking();
         public virtual void Create(T entity) => _dbSet.Add(entity);
-        public virtual void Update(T entity)
+        public virtual T Update(T entity)
         {
             _logger.LogInformation("Update Method Called");
             _dbSet.Update(entity);
+            return entity;
         }
-        public virtual void Delete(T entity)
+        public virtual bool Delete(int id)
         {
             _logger.LogInformation("Delete Method Called");
-            _dbSet.Remove(entity);
+            var entity = _dbSet.Find(id);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                return true;
+            }
+            return false;
         }
 
 
-        public virtual async Task<T> GetAync(int id)
+        public virtual async Task<T?> GetAync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -42,35 +49,32 @@ namespace ToDoAPI.DAL.BaseRepository
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
             _logger.LogInformation("AddAsync Method Called");
             await _dbSet.AddAsync(entity);
+            return entity;
         }
-        public virtual async Task DeleteAsync(int id)
+        public virtual void UpdateAsync(T entity)
+        {
+            _logger.LogInformation("UpdateAsync Method Called");
+            _dbSet.Update(entity);
+        }
+        public virtual async Task<bool> DeleteAsync(int id)
         {
             _logger.LogInformation("DeleteAsync Method Called");
             var entity = await _dbSet.FindAsync(id);
-            _dbSet.Remove(entity);
+            if (entity != null)
+            {
+                _dbSet.Remove(entity);
+                return true;
+            }
+            return false;
         }
-
-        //public virtual async Task UpdateAsync(T entity)
-        //{
-        //    _logger.LogInformation("UpdateAsync Method Called");
-        //    //_dbContext.Entry(entity).State = EntityState.Modified;
-        //    _dbSet.Update(entity);
-        //}
-
-        //public virtual async Task DeleteAsync(T entity)
-        //{
-        //    _logger.LogInformation("DeleteAsync Method Called");
-        //    _dbSet.Remove(entity);
-        //}
-
-        //public virtual async Task<bool> ExistsAsync(int id)
-        //{
-        //    var entity = await GetAync(id);
-        //    return entity != null;
-        //}
+        public virtual async Task<bool> ExistsAsync(int id)
+        {
+            var entity = await GetAync(id);
+            return entity != null;
+        }
     }
 }

@@ -12,14 +12,14 @@ namespace ToDoAPI.DAL.BaseRepository
         IQueryable<T> FindAll();
         IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
         void Create(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        T Update(T entity);
+        bool Delete(int id);
 
-        Task<T> GetAync(int id);
+        Task<T?> GetAync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
-        Task AddAsync(T entity);
-        Task DeleteAsync(int id);
-        //Task<bool> ExistsAsync(int id);
-        //Task UpdateAsync(T entity);
+        Task<T> AddAsync(T entity);
+        void UpdateAsync(T entity);
+        Task<bool> DeleteAsync(int id);
+        Task<bool> ExistsAsync(int id);
     }
 }

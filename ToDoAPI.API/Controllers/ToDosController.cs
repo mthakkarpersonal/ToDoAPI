@@ -55,9 +55,9 @@ namespace ToDoAPI.API.Controllers
             if (todo != null)
             {
                 todo.Name = data.Name;
-                todo.IsCompleted = data.IsCompleted;
+                todo.IsCompleted = data.IsCompleted;               
             }
-            _uow.ToDoRepository.Update(todo);
+            _uow.ToDoRepository.UpdateAsync(todo);
             await _uow.SaveAsync();
             return Ok();
         }
@@ -66,12 +66,7 @@ namespace ToDoAPI.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var todo = await _uow.ToDoRepository.GetAync(id);
-            if (todo == null)
-            {
-                return NotFound();
-            }
-            _uow.ToDoRepository.Delete(todo);
+            await _uow.ToDoRepository.DeleteAsync(id);
             await _uow.SaveAsync();
             return Ok();
         }
