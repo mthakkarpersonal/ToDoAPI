@@ -29,5 +29,19 @@ namespace ToDoAPI.Test
             //Assert
             _uow.Verify(_ => _.ToDoRepository.GetAllAsync(), Times.Exactly(1));
         }
+
+        [Fact]
+        public async Task GetById_CallRequest_GetByIdInvoked()
+        {
+            //arrange
+            int toDoId = 1;
+            _uow.Setup(_ => _.ToDoRepository.GetAync(toDoId)).ReturnsAsync(new ToDo() { });
+
+            // Act
+            var result = (OkObjectResult)await _toDoController.GetToDo(toDoId);
+
+            //Assert
+            _uow.Verify(_ => _.ToDoRepository.GetAync(toDoId), Times.Exactly(1));
+        }
     }
 }
