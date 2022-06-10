@@ -38,6 +38,10 @@ namespace ToDoAPI.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ToDo data)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             await _uow.ToDoRepository.AddAsync(data);
             await _uow.SaveAsync();
             return CreatedAtAction(nameof(GetToDo), new { id = data.Id }, data);

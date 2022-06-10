@@ -82,6 +82,25 @@ namespace ToDoAPI.Test
             _uow.Verify(_ => _.ToDoRepository.AddAsync(todo), Times.Exactly(1));
         }
 
+        [Fact]
+        public async Task Post_WhenCalled_BadRequestReturned()
+        {
+            //arrange
+            ToDo? todo = new ToDo
+            {
+                Id = 1,
+                //Name = "Test",
+                IsCompleted = true
+            };
+            _toDoController.ModelState.AddModelError("Name", "Required");
+
+            // Act
+            var result = await _toDoController.Post(todo);
+
+            //Assert
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
         /*[Fact]
         public async Task Update_WhenCalled_OkResultReturned()
         {
